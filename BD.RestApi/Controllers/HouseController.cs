@@ -14,11 +14,11 @@ namespace BD.RestApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class HouseController : ControllerBase
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private readonly IUserService userService;
-        public UserController(IUserService _userService)
+        public HouseController(IUserService _userService)
         {
             userService = _userService;
         }

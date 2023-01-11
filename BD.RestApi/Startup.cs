@@ -24,8 +24,6 @@ using Microsoft.AspNet.OData.Formatter;
 using Microsoft.AspNet.OData.Extensions;
 using AutoMapper;
 using Microsoft.Extensions.FileProviders;
-using BD.Services.User;
-using BD.Services.Type;
 
 namespace BD.RestApi
 {
@@ -71,7 +69,7 @@ namespace BD.RestApi
             services.AddControllers();
             services.AddScoped<BDDbContext>(x =>
             {
-                return new BDDbContext(Configuration.GetConnectionString("FADb"));
+                return new BDDbContext(Configuration.GetConnectionString("BDDb"));
             });
             services.AddTransient<DbContext>(x =>
             {
@@ -79,8 +77,6 @@ namespace BD.RestApi
             });
             services.AddMemoryCache();
 
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<ITypeService, TypeService>();
 
             services.AddCors(builder => builder.AddPolicy("CorsPolicy",
                 builder => builder.AllowAnyOrigin()
@@ -90,7 +86,7 @@ namespace BD.RestApi
 
             services.AddSwaggerGen(swaggerAction =>
             {
-                swaggerAction.SwaggerDoc("FARestApi", new Microsoft.OpenApi.Models.OpenApiInfo()
+                swaggerAction.SwaggerDoc("BDRestApi", new Microsoft.OpenApi.Models.OpenApiInfo()
                 {
                     Title = "BD Rest API",
                     Version = "1",
@@ -165,7 +161,7 @@ namespace BD.RestApi
             }
             );
             app.UseSwaggerUI(swaggerAction => {
-                swaggerAction.SwaggerEndpoint("/swagger/FARestApi/swagger.json", "FARestApi");
+                swaggerAction.SwaggerEndpoint("/swagger/BDRestApi/swagger.json", "BDRestApi");
             });
             app.UseMvc(routeBuilder =>
             {
