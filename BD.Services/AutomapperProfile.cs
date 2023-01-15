@@ -16,12 +16,16 @@ namespace BD.Services
             CreateMap<Dom, HouseInfo>();
             CreateMap<HouseInfo, Dom>();
 
-            CreateMap<LicznikPradu, MeterInfo>();
-            CreateMap<LicznikWody, MeterInfo>();
+            CreateMap<LicznikPradu, MeterInfo>()
+                .ForMember(s => s.HouseId, d => d.MapFrom(x => x.DomId));
+            CreateMap<LicznikWody, MeterInfo>()
+                .ForMember(s => s.HouseId, d => d.MapFrom(x => x.DomId));
 
-            CreateMap<MeterInfo, LicznikPradu>();
-            CreateMap<MeterInfo,LicznikWody>();
-            
+            CreateMap<MeterInfo, LicznikPradu>()
+                .ForMember(s => s.DomId, d => d.MapFrom(x => x.HouseId));
+            CreateMap<MeterInfo,LicznikWody>()
+                .ForMember(s => s.DomId, d => d.MapFrom(x => x.HouseId));
+
         }
     }
 }

@@ -23,7 +23,7 @@ namespace BD.RestApi.Controllers
             houseService = _houseService;
         }
 
-        [HttpGet]
+        [HttpGet("getHouse")]
         public HouseInfo getHouse(int id)
         {
             try
@@ -37,7 +37,7 @@ namespace BD.RestApi.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("getAllHouses")]
         public IEnumerable<HouseInfo> getAllHouses()
         {
             try
@@ -51,7 +51,7 @@ namespace BD.RestApi.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("addOrUpdateHouse")]
         public void addOrUpdateHouse(HouseInfo house)
         {
             try

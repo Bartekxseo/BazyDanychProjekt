@@ -17,7 +17,8 @@ namespace BD.RestApi.Controllers
         {
             meterService = _meterService;
         }
-        [HttpGet]
+
+        [HttpGet("getMeterValuesForHouse")]
         public MeterInfos getMeterValuesForHouse(int id)
         {
             try
@@ -31,7 +32,7 @@ namespace BD.RestApi.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("addOrUpdateWaterMeterValue")]
         public void addOrUpdateWaterMeterValue(MeterInfo value)
         {
             try
@@ -45,7 +46,7 @@ namespace BD.RestApi.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("addOrUpdateElectricityMeterValue")]
         public void addOrUpdateElectricityrMeterValue(MeterInfo value)
         {
             try
