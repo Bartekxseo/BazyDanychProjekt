@@ -38,5 +38,12 @@ namespace BD.Services.House
         {
             return dbContext.Set<Dom>().Where(x => x.Id == id).ProjectTo<HouseInfo>(mapper.ConfigurationProvider).SingleOrDefault();
         }
+
+        public void deleteHouse(int id)
+        {
+            var house = dbContext.Set<Dom>().Where(x => x.Id == id).FirstOrDefault();
+            dbContext.Set<Dom>().Remove(house);
+            dbContext.SaveChanges();
+        }
     }
 }

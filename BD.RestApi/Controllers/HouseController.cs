@@ -65,6 +65,20 @@ namespace BD.RestApi.Controllers
             }
         }
 
+        [HttpDelete("deleteHouse")]
+        public void deleteHouse(int id)
+        {
+            try
+            {
+                houseService.deleteHouse(id);
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+                throw new Exception("", ex);
+            }
+        }
+
         
     }
 }

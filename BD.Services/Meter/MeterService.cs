@@ -37,6 +37,21 @@ namespace BD.Services.Meter
             dbContext.SaveChanges();
         }
 
+        public void deleteMeterValue(int id, string type)
+        {
+            if (type == "Wody")
+            {
+                var value = dbContext.Set<LicznikWody>().Where(x => x.Id == id).FirstOrDefault();
+                dbContext.Set<LicznikWody>().Remove(value);
+            }
+            else
+            {
+                var value = dbContext.Set<LicznikPradu>().Where(x => x.Id == id).FirstOrDefault();
+                dbContext.Set<LicznikPradu>().Remove(value);
+            }
+            dbContext.SaveChanges();
+        }
+
         public MeterInfos getMeterValuesForHouse(int id)
         {
             var electricityInfo = dbContext.Set<LicznikPradu>().Where(x => x.DomId == id).ProjectTo<MeterInfo>(mapper.ConfigurationProvider).ToList();

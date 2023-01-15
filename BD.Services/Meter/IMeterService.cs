@@ -9,5 +9,6 @@ namespace BD.Services.Meter
     {
         public MeterInfos getMeterValuesForHouse(int id);
         public void addOrUpdateMeterValue(MeterInfo value, string type);
+        public void deleteMeterValue(int id,string type);
     }
 }
