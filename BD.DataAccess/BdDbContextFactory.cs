@@ -5,9 +5,9 @@ using System.Text;
 
 namespace BD.DataAccess
 {
-    public class FADbContextFactory : IDbContextFactory<BDDbContext>
+    public class BDDbContextFactory : IDbContextFactory<BDDbContext>
     {
-        public FADbContextFactory()
+        public BDDbContextFactory()
         {
         }
 

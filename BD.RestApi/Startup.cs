@@ -24,6 +24,8 @@ using Microsoft.AspNet.OData.Formatter;
 using Microsoft.AspNet.OData.Extensions;
 using AutoMapper;
 using Microsoft.Extensions.FileProviders;
+using BD.Services.House;
+using BD.Services.Meter;
 
 namespace BD.RestApi
 {
@@ -77,6 +79,8 @@ namespace BD.RestApi
             });
             services.AddMemoryCache();
 
+            services.AddScoped<IHouseService, HouseService>();
+            services.AddScoped<IMeterService, MeterService>();
 
             services.AddCors(builder => builder.AddPolicy("CorsPolicy",
                 builder => builder.AllowAnyOrigin()

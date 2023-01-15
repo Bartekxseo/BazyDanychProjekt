@@ -12,6 +12,15 @@ namespace BD.Services
     {
         public AutomapperProfile()
         {
+
+            CreateMap<Dom, HouseInfo>();
+            CreateMap<HouseInfo, Dom>();
+
+            CreateMap<LicznikPradu, MeterInfo>();
+            CreateMap<LicznikWody, MeterInfo>();
+
+            CreateMap<MeterInfo, LicznikPradu>();
+            CreateMap<MeterInfo,LicznikWody>();
             
         }
     }

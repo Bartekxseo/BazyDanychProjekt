@@ -4,10 +4,11 @@ using System.Text;
 
 namespace BD.Services.Models
 {
-    public class TypeInfo
+    public class MeterInfo
     {
         public int Id { get; set; }
+        public int Value { get; set; }
+        public int HouseId { get; set; }
 
-        public string Name { get; set; }
     }
 }

@@ -1,34 +1,28 @@
-﻿using BD.Services.House;
+﻿using BD.Services.Meter;
 using BD.Services.Models;
-using Microsoft.AspNet.OData.Query;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NLog;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BD.RestApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class HouseController : ControllerBase
+    public class MeterController : ControllerBase
     {
+        private readonly IMeterService meterService;
         private static Logger logger = LogManager.GetCurrentClassLogger();
-        private readonly IHouseService houseService;
-        public HouseController(IHouseService _houseService)
+        public MeterController(IMeterService _meterService)
         {
-            houseService = _houseService;
+            meterService = _meterService;
         }
-
         [HttpGet]
-        public HouseInfo getHouse(int id)
+        public MeterInfos getMeterValuesForHouse(int id)
         {
             try
             {
-                return houseService.getHouse(id);
+                return meterService.getMeterValuesForHouse(id);
             }
             catch (Exception ex)
             {
@@ -37,12 +31,12 @@ namespace BD.RestApi.Controllers
             }
         }
 
-        [HttpGet]
-        public IEnumerable<HouseInfo> getAllHouses()
+        [HttpPost]
+        public void addOrUpdateWaterMeterValue(MeterInfo value)
         {
             try
             {
-                return houseService.getAllHouses();
+                meterService.addOrUpdateMeterValue(value, "Wody");
             }
             catch (Exception ex)
             {
@@ -52,11 +46,11 @@ namespace BD.RestApi.Controllers
         }
 
         [HttpPost]
-        public void addOrUpdateHouse(HouseInfo house)
+        public void addOrUpdateElectricityrMeterValue(MeterInfo value)
         {
             try
             {
-                houseService.addOrUpdateHouse(house);
+                meterService.addOrUpdateMeterValue(value, "Pradu");
             }
             catch (Exception ex)
             {
@@ -64,7 +58,5 @@ namespace BD.RestApi.Controllers
                 throw new Exception("", ex);
             }
         }
-
-        
     }
 }
