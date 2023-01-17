@@ -59,5 +59,33 @@ namespace BD.RestApi.Controllers
                 throw new Exception("", ex);
             }
         }
+
+        [HttpDelete("deleteWaterMeterValue")]
+        public void deleteWaterMeterValue(int id)
+        {
+            try
+            {
+                meterService.deleteMeterValue(id, "Wody");
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+                throw new Exception("", ex);
+            }
+        }
+
+        [HttpDelete("deleteElectricityMeterValue")]
+        public void addOrUpdateElectricityrMeterValue(int id)
+        {
+            try
+            {
+                meterService.deleteMeterValue(id, "Pradu");
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+                throw new Exception("", ex);
+            }
+        }
     }
 }

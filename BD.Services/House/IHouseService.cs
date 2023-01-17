@@ -13,5 +13,7 @@ namespace BD.Services.House
 
         void addOrUpdateHouse(HouseInfo houseInfo);
 
+        void deleteHouse(int id);
+
     }
 }
