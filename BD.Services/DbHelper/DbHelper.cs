@@ -9,14 +9,15 @@ using System.Linq;
 
 namespace BD.Services.DbHelper
 {
-    
+
     public class DbHelper : IDbHelper
     {
         private readonly BDDbContext dbContext;
         private readonly BDRead1DbContext dbRead1Context;
         private readonly BDRead2DbContext dbRead2Context;
         private int iterator = 0;
-        public DbHelper(BDRead2DbContext dbRead2Context,BDRead1DbContext dbRead1Context,BDDbContext dbContext)
+        private int exceptionCounter = 0;
+        public DbHelper(BDRead2DbContext dbRead2Context, BDRead1DbContext dbRead1Context, BDDbContext dbContext)
         {
             this.dbRead2Context = dbRead2Context;
             this.dbRead1Context = dbRead1Context;
@@ -32,7 +33,7 @@ namespace BD.Services.DbHelper
             catch (Exception ex)
             {
 
-                throw new Exception("",ex);
+                throw new Exception("", ex);
             }
         }
 
@@ -43,24 +44,47 @@ namespace BD.Services.DbHelper
                 try
                 {
                     iterator++;
-                    return dbRead1Context.Set<T>();
+                    var result = dbRead1Context.Set<T>();
+                    exceptionCounter = 0;
+                    return result;
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    return Get<T>();
+                    if (exceptionCounter == 3)
+                    {
+                        exceptionCounter = 0;
+                        throw new Exception("", ex);
+                    }
+                    else
+                    {
+                        exceptionCounter++;
+                        return Get<T>();
+                    }
+
                 }
             }
-            else if(iterator % 3 == 1)
+            else if (iterator % 3 == 1)
             {
                 try
                 {
                     iterator++;
-                    return dbRead2Context.Set<T>();
+                    var result = dbRead2Context.Set<T>();
+                    exceptionCounter = 0;
+                    return result;
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    if (exceptionCounter == 3)
+                    {
+                        exceptionCounter = 0;
+                        throw new Exception("", ex);
+                    }
+                    else
+                    {
+                        exceptionCounter++;
+                        return Get<T>();
+                    }
 
-                    return Get<T>();
                 }
             }
             else
@@ -68,14 +92,25 @@ namespace BD.Services.DbHelper
                 try
                 {
                     iterator++;
-                    return dbContext.Set<T>();
+                    var result = dbContext.Set<T>();
+                    exceptionCounter = 0;
+                    return result;
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    if (exceptionCounter == 3)
+                    {
+                        exceptionCounter = 0;
+                        throw new Exception("", ex);
+                    }
+                    else
+                    {
+                        exceptionCounter++;
+                        return Get<T>();
+                    }
 
-                    return Get<T>();
                 }
             }
-        }
+        } 
     }
 }
