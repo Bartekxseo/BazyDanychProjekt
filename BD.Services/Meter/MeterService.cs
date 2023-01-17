@@ -2,12 +2,14 @@
 using AutoMapper.QueryableExtensions;
 using BD.DataAccess;
 using BD.Domain.Entities;
+using BD.Services.DbHelper;
 using BD.Services.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace BD.Services.Meter
@@ -16,10 +18,12 @@ namespace BD.Services.Meter
     {
         private readonly BDDbContext dbContext;
         private readonly IMapper mapper;
-        public MeterService(BDDbContext _dbCotext, IMapper _mapper)
+        private readonly IDbHelper dbHelper;
+        public MeterService(BDDbContext _dbCotext, IMapper _mapper,IDbHelper _dbHelper)
         {
             dbContext = _dbCotext;
             mapper = _mapper;
+            dbHelper = _dbHelper;
         }
 
         public void addOrUpdateMeterValue(MeterInfo value, string type)
@@ -39,8 +43,8 @@ namespace BD.Services.Meter
 
         public MeterInfos getMeterValuesForHouse(int id)
         {
-            var electricityInfo = dbContext.Set<LicznikPradu>().Where(x => x.DomId == id).ProjectTo<MeterInfo>(mapper.ConfigurationProvider).ToList();
-            var waterInfo = dbContext.Set<LicznikWody>().Where(x => x.DomId == id).ProjectTo<MeterInfo>(mapper.ConfigurationProvider).ToList();
+            var electricityInfo = dbHelper.GetWhere<LicznikPradu>(x=>x.DomId == id).ProjectTo<MeterInfo>(mapper.ConfigurationProvider).ToList();
+            var waterInfo = dbHelper.GetWhere<LicznikWody>(x=>x.DomId == id).ProjectTo<MeterInfo>(mapper.ConfigurationProvider).ToList();
             return new MeterInfos
             {
                 ElectricityMeter = electricityInfo,

@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using BD.DataAccess;
 using BD.Domain.Entities;
+using BD.Services.DbHelper;
 using BD.Services.Models;
 using System;
 using System.Collections.Generic;
@@ -15,10 +16,12 @@ namespace BD.Services.House
     {
         private readonly BDDbContext dbContext;
         private readonly IMapper mapper;
-        public HouseService(BDDbContext _dbContext,IMapper _mapper)
+        private readonly IDbHelper dbHelper;
+        public HouseService(BDDbContext _dbContext,IMapper _mapper,IDbHelper _dbHelper)
         {
             dbContext = _dbContext;
             mapper = _mapper;
+            dbHelper = _dbHelper;
 
         }
 
@@ -31,12 +34,12 @@ namespace BD.Services.House
 
         public List<HouseInfo> getAllHouses()
         {
-            return dbContext.Set<Dom>().ProjectTo<HouseInfo>(mapper.ConfigurationProvider).ToList();
+            return dbHelper.Get<Dom>().ProjectTo<HouseInfo>(mapper.ConfigurationProvider).ToList();
         }
 
         public HouseInfo getHouse(int id)
         {
-            return dbContext.Set<Dom>().Where(x => x.Id == id).ProjectTo<HouseInfo>(mapper.ConfigurationProvider).SingleOrDefault();
+            return dbHelper.GetWhere<Dom>(x=>x.Id == id).ProjectTo<HouseInfo>(mapper.ConfigurationProvider).SingleOrDefault();
         }
     }
 }

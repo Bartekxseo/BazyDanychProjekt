@@ -26,6 +26,7 @@ using AutoMapper;
 using Microsoft.Extensions.FileProviders;
 using BD.Services.House;
 using BD.Services.Meter;
+using BD.Services.DbHelper;
 
 namespace BD.RestApi
 {
@@ -77,10 +78,27 @@ namespace BD.RestApi
             {
                 return x.GetService<BDDbContext>();
             });
+            services.AddScoped<BDRead1DbContext>(x =>
+            {
+                return new BDRead1DbContext(Configuration.GetConnectionString("BDRead1Db"));
+            });
+            services.AddTransient<DbContext>(x =>
+            {
+                return x.GetService<BDRead1DbContext>();
+            });
+            services.AddScoped<BDRead2DbContext>(x =>
+            {
+                return new BDRead2DbContext(Configuration.GetConnectionString("BDDb"));
+            });
+            services.AddTransient<DbContext>(x =>
+            {
+                return x.GetService<BDRead2DbContext>();
+            });
             services.AddMemoryCache();
 
             services.AddScoped<IHouseService, HouseService>();
             services.AddScoped<IMeterService, MeterService>();
+            services.AddScoped<IDbHelper, DbHelper>();
 
             services.AddCors(builder => builder.AddPolicy("CorsPolicy",
                 builder => builder.AllowAnyOrigin()
