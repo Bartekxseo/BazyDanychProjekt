@@ -6,6 +6,10 @@ using System.Text;
 using System.Linq.Expressions;
 using System.Linq.Dynamic.Core;
 using System.Linq;
+using System.Data.SqlClient;
+using AutoMapper;
+using BD.Domain.Entities;
+using BD.Services.Models;
 
 namespace BD.Services.DbHelper
 {
@@ -39,78 +43,96 @@ namespace BD.Services.DbHelper
 
         public DbSet<T> Get<T>() where T : class
         {
-            if (iterator % 3 == 0)
+
+            List<DbContext> dbList = new List<DbContext>() { dbContext, dbRead1Context, dbRead2Context };
+
+
+            foreach (DbContext context in dbList)
             {
                 try
                 {
-                    iterator++;
-                    var result = dbRead1Context.Set<T>();
-                    exceptionCounter = 0;
-                    return result;
+                    context.Set<Dom>().FirstOrDefault();
+                    return context.Set<T>();
                 }
-                catch (Exception ex)
-                {
-                    if (exceptionCounter == 3)
-                    {
-                        exceptionCounter = 0;
-                        throw new Exception("", ex);
-                    }
-                    else
-                    {
-                        exceptionCounter++;
-                        return Get<T>();
-                    }
-
+                catch (Exception e) {
                 }
             }
-            else if (iterator % 3 == 1)
-            {
-                try
-                {
-                    iterator++;
-                    var result = dbRead2Context.Set<T>();
-                    exceptionCounter = 0;
-                    return result;
-                }
-                catch (Exception ex)
-                {
-                    if (exceptionCounter == 3)
-                    {
-                        exceptionCounter = 0;
-                        throw new Exception("", ex);
-                    }
-                    else
-                    {
-                        exceptionCounter++;
-                        return Get<T>();
-                    }
+            throw new Exception("");
 
-                }
-            }
-            else
-            {
-                try
-                {
-                    iterator++;
-                    var result = dbContext.Set<T>();
-                    exceptionCounter = 0;
-                    return result;
-                }
-                catch (Exception ex)
-                {
-                    if (exceptionCounter == 3)
-                    {
-                        exceptionCounter = 0;
-                        throw new Exception("", ex);
-                    }
-                    else
-                    {
-                        exceptionCounter++;
-                        return Get<T>();
-                    }
 
-                }
-            }
-        } 
+            //    if (iterator % 3 == 0)
+            //    {
+            //        try
+            //        {
+            //            iterator++;
+            //            var result = dbRead1Context.Set<T>();
+            //            exceptionCounter = 0;
+            //            return result;
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            if (exceptionCounter == 3)
+            //            {
+            //                exceptionCounter = 0;
+            //                throw new Exception("", ex);
+            //            }
+            //            else
+            //            {
+            //                exceptionCounter++;
+            //                return Get<T>();
+            //            }
+
+            //        }
+            //    }
+            //    else if (iterator % 3 == 1)
+            //    {
+            //        try
+            //        {
+            //            iterator++;
+            //            var result = dbRead2Context.Set<T>();
+            //            exceptionCounter = 0;
+            //            return result;
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            if (exceptionCounter == 3)
+            //            {
+            //                exceptionCounter = 0;
+            //                throw new Exception("", ex);
+            //            }
+            //            else
+            //            {
+            //                exceptionCounter++;
+            //                return Get<T>();
+            //            }
+
+            //        }
+            //    }
+            //    else
+            //    {
+            //        try
+            //        {
+            //            iterator++;
+            //            var result = dbContext.Set<T>();
+            //            exceptionCounter = 0;
+            //            return result;
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            if (exceptionCounter == 3)
+            //            {
+            //                exceptionCounter = 0;
+            //                throw new Exception("", ex);
+            //            }
+            //            else
+            //            {
+            //                exceptionCounter++;
+            //                return Get<T>();
+            //            }
+
+            //        }
+            //    }
+            //} 
+        }
     }
 }
