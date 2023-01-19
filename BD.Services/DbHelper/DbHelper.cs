@@ -10,6 +10,7 @@ using System.Data.SqlClient;
 using AutoMapper;
 using BD.Domain.Entities;
 using BD.Services.Models;
+using NLog;
 
 namespace BD.Services.DbHelper
 {
@@ -19,6 +20,7 @@ namespace BD.Services.DbHelper
         private readonly BDDbContext dbContext;
         private readonly BDRead1DbContext dbRead1Context;
         private readonly BDRead2DbContext dbRead2Context;
+        private static Logger logger = LogManager.GetCurrentClassLogger();
         private int iterator = 0;
 
         public DbHelper(BDRead2DbContext dbRead2Context, BDRead1DbContext dbRead1Context, BDDbContext dbContext)
@@ -36,7 +38,7 @@ namespace BD.Services.DbHelper
             }
             catch (Exception ex)
             {
-
+                logger.Error(ex);
                 throw new Exception("", ex);
             }
         }
@@ -56,7 +58,7 @@ namespace BD.Services.DbHelper
                     iterator++;
                     return context.Set<T>();
                 }
-                catch (Exception) {}
+                catch (Exception ex) { logger.Error(ex); }
             }
             try
             {
@@ -65,6 +67,7 @@ namespace BD.Services.DbHelper
             }
             catch (Exception ex)
             {
+                logger.Error(ex);
                 throw new Exception("",ex);
             }
         }
