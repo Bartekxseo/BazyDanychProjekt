@@ -20,7 +20,7 @@ namespace BD.Services.DbHelper
         private readonly BDRead1DbContext dbRead1Context;
         private readonly BDRead2DbContext dbRead2Context;
         private int iterator = 0;
-        private int exceptionCounter = 0;
+
         public DbHelper(BDRead2DbContext dbRead2Context, BDRead1DbContext dbRead1Context, BDDbContext dbContext)
         {
             this.dbRead2Context = dbRead2Context;
@@ -43,96 +43,30 @@ namespace BD.Services.DbHelper
 
         public DbSet<T> Get<T>() where T : class
         {
-
-            List<DbContext> dbList = new List<DbContext>() { dbContext, dbRead1Context, dbRead2Context };
-
-
-            foreach (DbContext context in dbList)
+            var dbList = new List<DbContext>() { dbRead1Context, dbRead2Context };
+            if(iterator%2==1)
+            {
+                dbList.Reverse();
+            }
+            foreach (var context in dbList)
             {
                 try
                 {
                     context.Set<Dom>().FirstOrDefault();
+                    iterator++;
                     return context.Set<T>();
                 }
-                catch (Exception e) {
-                }
+                catch (Exception) {}
             }
-            throw new Exception("");
-
-
-            //    if (iterator % 3 == 0)
-            //    {
-            //        try
-            //        {
-            //            iterator++;
-            //            var result = dbRead1Context.Set<T>();
-            //            exceptionCounter = 0;
-            //            return result;
-            //        }
-            //        catch (Exception ex)
-            //        {
-            //            if (exceptionCounter == 3)
-            //            {
-            //                exceptionCounter = 0;
-            //                throw new Exception("", ex);
-            //            }
-            //            else
-            //            {
-            //                exceptionCounter++;
-            //                return Get<T>();
-            //            }
-
-            //        }
-            //    }
-            //    else if (iterator % 3 == 1)
-            //    {
-            //        try
-            //        {
-            //            iterator++;
-            //            var result = dbRead2Context.Set<T>();
-            //            exceptionCounter = 0;
-            //            return result;
-            //        }
-            //        catch (Exception ex)
-            //        {
-            //            if (exceptionCounter == 3)
-            //            {
-            //                exceptionCounter = 0;
-            //                throw new Exception("", ex);
-            //            }
-            //            else
-            //            {
-            //                exceptionCounter++;
-            //                return Get<T>();
-            //            }
-
-            //        }
-            //    }
-            //    else
-            //    {
-            //        try
-            //        {
-            //            iterator++;
-            //            var result = dbContext.Set<T>();
-            //            exceptionCounter = 0;
-            //            return result;
-            //        }
-            //        catch (Exception ex)
-            //        {
-            //            if (exceptionCounter == 3)
-            //            {
-            //                exceptionCounter = 0;
-            //                throw new Exception("", ex);
-            //            }
-            //            else
-            //            {
-            //                exceptionCounter++;
-            //                return Get<T>();
-            //            }
-
-            //        }
-            //    }
-            //} 
+            try
+            {
+                dbContext.Set<Dom>().FirstOrDefault();
+                return dbContext.Set<T>();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("",ex);
+            }
         }
     }
 }
